@@ -1,49 +1,38 @@
-## Media Player Classic Qute Theater
+# Media Player Classic - Qute Theater
 
-A clone of Media Player Classic reimplemented in Qt.
+## A clone of Media Player Classic reimplemented in Qt.
 
-![screenshot]
+![Screenshot][1]
 
-[Media Player Classic Home Cinema][mpc-hc] (mpc-hc) is considered by many to
-be the quintessential media player for the Windows desktop.  Media Player
-Classic Qute Theater (mpc-qt) aims to reproduce most of the interface and
-functionality of mpc-hc while using [libmpv] to play video instead of
+[Media Player Classic - Home Cinema][2] (mpc-hc) is considered by many to
+be the quintessential media player for the Windows desktop. Media Player
+Classic - Qute Theater (mpc-qt) aims to reproduce most of the interface and
+functionality of mpc-hc while using [libmpv][3] to play video instead of
 DirectShow.
-
 
 ## Releases
 
-There is no RC.  Despite this situation, you may test it out and determine if
-what works is satisfying for you.  If not, please open an issue that may
-motivate the developer in a helpful direction.
+There is currently no official build/release. Despite this, you may [build it
+from source][4] and determine if the experience from the current codebase is
+satisfactory to you. If not, please open an issue that may direct the
+developers in a helpful direction.
 
-The best version is git master, and everyone are encouraged to increase their
-computer-fu by compiling from source. (see sections below.)  Compiling from
-source gives you several advantages over the usual user, such the ability to
-use latest and pre-release software regardless of where it comes from.  Unix
-users, there could even be packages in your distro that help with this. (e.g.
-[aur], [ports].)
-
-There are builds for Windows users on the release page.  Every now and then
-the developer makes a Windows build based on a recent commit and posts it on
-the releases page.  These use time-based versioning (e.g. 17.07 corresponds to
-2017 July), are provided for the convenience of Windows users who usually do
-not have a development environment, and should not be considered to represent
-any serious release-worthy snapshot in any way.  This may change when the
-program is more feature-complete.
-
+Compiling from source offers several advantages over pre-built releases, such
+as the ability to use the most current codebase instead of a snapshot of some
+earlier state. There could also be unofficial packages in some Linux
+distribution archives (e.g. [Arch User Repository][5], [FreshPorts][6])
+available for installation.
 
 ## Features
 
 Nearly everything that mpc-hc does.  For the most part, unwritten
 portions relate to setting options and streaming from devices.
 
-
-### Improvements over mpc-hc
+### Improvements over MPC-HC
 
 **Multiple playlists:**  When you're watching shows on your backlog, load
 every show into separate playlists and still keep track of the last played
-file *for each playlist*.  Finally you can eliminate the need to keep track of
+file _for each playlist_.  Finally you can eliminate the need to keep track of
 your progress in a spreadsheet, all while never leaving the comfort of your
 favorite media player.
 
@@ -64,7 +53,6 @@ isn't it?
 show the artist as well as the title, down to even the encoder used?  Nothing
 is stopping you.
 
-
 ### Upcoming features
 
 **Native filter-chain support:**  Comprehensive integration of mpv/ffmpeg's
@@ -75,132 +63,123 @@ open a video editor when your media player can do your job for you.
 
 **Race Inspired Cosmetic Enhancements:**  In-app custom styling support.
 
-Suggestions welcome.
-
+[Suggestions welcome][7].
 
 ## Compiling
 
 ### Prerequisites
 
-You need the Qt5 SDK installed and a recent edition of libmpv.  On Ubuntu you
-can usually install the required libraries with the ``qtcreator``,
-``qt5-default``, ``libqt5x11extras5-dev``, ``qttools5-dev-tools`` and
-``libmpv-dev`` packages.  A recent edition of [libmpv] means either from git
-head or at least version 0.29.0.  The mpv options for this are
-``--enable-libmpv-shared`` for shared library support, and
-``--enable-libarchive`` if you want to use mpc-qt as a comic book viewer.
+You need git, make, qmake, the current Qt 5 Software Development Kit, as well as
+a recent version of libarchive and version 0.29.0 or newer of libmpv with the
+accompanying development headers for both libraries installed on your system before
+you can attempt a build.  On Debian-based Linux distributions (xUbuntu, Linux Mint,
+et al.) you can usually install all of these with this one shell command:
 
-### I don't know git, how do I do this?
+```bash
+sudo apt -y install git libarchive-dev libmpv-dev libqt5x11extras5-dev make qmake qt5-default qtcreator qttools5-dev-tools
+```
 
-First ensure you have the prerequisites as mentioned above, then open a terminal
-and `cd` into your general source-code directory. If one does not exist,
-`mkdir` one.
+The major options of note available in the Makefile are `--enable-libmpv-shared` for
+shared library support (you want to use this unless you also built libmpv from source),
+and `--enable-libarchive` if you want to use mpc-qt as a comic book viewer.
 
->mkdir src
+### I don't know sh..., I mean git
 
->cd ~/src
+First ensure you have the [prerequisites mentioned above][8], then open a terminal
+emulator and start by downloading a copy of this repository to your computer. This
+command will do that and make the new folder containing the code your working
+directory:
 
-Then clone this git repository using the following command:
+```bash
+git clone https://github.com/RogueScholar/mpc-qt.git && cd mpc-qt
+```
 
->git clone https://github.com/cmdrkotori/mpc-qt.git
+Then build with qmake and make.
 
-Finally, `cd` into the checked-out repository.
+```bash
+qmake -makefile && make -j$(nproc)
+```
 
->cd mpc-qt
+If your terminal emulator returns to a command prompt without reporting any errors,
+you can install your spiffy new build with this command:
 
-Then build with qmake+make.
+```bash
+sudo make install
+```
 
->qmake
+You're done! Take note of the folder displayed in your shell prompt though, because
+in the future, should you wish to compile another build with any improvements to the
+codebase since this one, you can return to it and update your copy of the source code
+with one simple command:
 
->make -j *threads*
+```bash
+make clean && git pull origin master
+```
 
->sudo make install
-
-You're done!  Later on, performing a git pull from inside the source code
-directory will get the latest changes.
-
->git pull origin master
-
-Rebuild by following the qmake+make steps as described above.
+The re-build process is done with the same qmake and make install commands as before.
 
 ### I have compiler/linker errors
 
-Some distros have an ancient version of mpv in their repos.  You can install
-libmpv in the following method:
+First, check the version of libmpv on your system; some package repositories
+(_**cough**_ Debian _**cough**_) have an ancient version of mpv. On Debian-based
+Linux distributions this command will show you what you have and any other versions
+that are available:
 
-Uninstall any libmpv package you may have.
+```bash
+apt-cache -a show libmpv-dev
+```
+If you see a version older than 0.29.0 listed as installed, you can either find
+another package compatible with your distribution of at least that version, or you
+can uninstall your current package and [build libmpv][9] yourself with these commands:
 
->sudo apt purge libmpv-dev
+```bash
+sudo apt purge libmpv libmpv-dev
+git clone https://github.com/mpv-player/mpv-build.git && cd mpv-build
+./use-ffmpeg-master
+./use-libass-master
+./use-mpv-master
+sudo apt -y install devscripts equivs
+rm -f mpv-build-deps\_\*\_\*.deb
+mk-build-deps -s sudo -i
+echo --enable-libmpv-shared > mpv_options
+./update
+./build -j$(nproc)
+sudo ./install
+sudo ldconfig
+```
 
-Fetch the mpv-build repo.
+If you encountered no errors, the latest version of libmpv should now be installed
+to `/usr/local`.
 
->cd ~/src
+### Microsoft Windows build systems
 
->git clone https://github.com/mpv-player/mpv-build.git
+While this program is meant for Linux systems, it is possible to compile it on
+Microsoft Windows computers with the [MSYS2 edition of Qt Creator][10] due to the
+cross-platform nature of the Qt 5 toolkit. MSVC is not supported, though. Also,
+the build process needs librsvg, ImageMagick and Inkscape to create the Windows
+.ico file for the desktop/Start menu shortcuts to display. Use `pacman -Ss <package name>`
+to find them.
 
->cd mpv-build
+mpc-qt can be compiled with a libmpv linked to MSYS2's ffmpeg libraries, or by
+using the [prebuilt library from srsfckn.biz][11]. To use the prebuilt library,
+after cloning this repository download libmpv from the [mpv windows release page][11],
+and extract it somewhere. Place the libraries for your architechture from mpv-dev.7z
+(e.g. `mpv-dev.7z/64`) into `mpv-dev/lib`. Then place the include files from mpv-dev.7z
+(usually at `mpv-dev.zip/include`) into `mpv-dev/include/mpv`. Compile with the 64-bit
+Qt 5 framework as usual.
 
-Select the master versions to compile.
+Bleeding-edge git master builds that use new features not yet in a release can usually
+be made with [Shinchiro builds of libmpv][12]. Unpack in the same manner as above.
 
->./use-ffmpeg-master
-
->./use-libass-master
-
->./use-mpv-master
-
-Follow the instructions for debian and ubuntu about making a build-deps
-package. (or whatever method for your distro.)
-
->sudo apt-get install git devscripts equivs
-
->rm -f mpv-build-deps\_\*\_\*.deb
-
->mk-build-deps -s sudo -i
-
-Build libmpv.
-
->echo --enable-libmpv-shared > mpv_options
-
->./update
-
->./build -j4
-
->sudo ./install
-
->sudo ldconfig
-
-libmpv should now be installed to `/usr/local/*`.
-
-
-## Compiling on Windows
-
-While this program is meant for Unix, it is possible to compile it on Windows
-with the [MSYS2 edition of Qt Creator] due to the largely cross-platform Qt
-toolkit.  MSVC is not supported.  In addition, the build process needs the
-imagemagick, librsvg and inkscape packages to create the windows ico file.
-Use `pacman -Ss <package description/name/etc>` to find them.
-
-Mpc-Qt can be compiled with a libmpv linked to MSYS2's ffmpeg libraries, or by
-using the prebuilt library from mpv.srsfckn.biz.  To use the prebuilt library
-after cloning this repository, download libmpv from the
-[mpv windows release page], and extract it somewhere.  Place the libraries for
-your architechture from mpv-dev.7z (e.g. `mpv-dev.7z/64`) into `mpv-dev/lib`.
-Then place the include files from mpv-dev.7z (usually at `mpv-dev.zip/include`)
-into `mpv-dev/include/mpv`.  Compile with the 64bit Qt framework as usual.
-
-Bleeding-edge git master builds that use new features not yet in a release can
-usually be made with [shinchiro builds] of libmpv.  Unpack in the same manner
-as above.
-
-[screenshot]:https://gist.githubusercontent.com/cmdrkotori/c26e75fa01341ec54b648f1ff082a71a/raw/885f4af0df7342ec2adc1353749ad3522fab196c/screenshot%252020180427.png
-[mpc-hc]:https://mpc-hc.org/
-[libmpv]:https://github.com/mpv-player/mpv
-[mwe]:https://github.com/cmdrkotori/mpc-qt/commit/9400f595
-[aur]:https://aur.archlinux.org/packages/mpc-qt-git/
-[ports]:https://www.freshports.org/multimedia/mpc-qt
-[mpv-build]:https://github.com/mpv-player/mpv-build
-[bomi]:https://github.com/xylosper/bomi
-[baka]:https://github.com/u8sand/Baka-MPlayer
-[mpv windows release page]:https://mpv.srsfckn.biz/
-[shinchiro builds]:https://sourceforge.net/projects/mpv-player-windows/files/libmpv/
-[MSYS2 edition of Qt Creator]:https://wiki.qt.io/MSYS2
+[1]: https://user-images.githubusercontent.com/15098724/60409942-9040ec00-9b7a-11e9-9d0b-35f2b2579333.png
+[2]: https://mpc-hc.org/
+[3]: https://github.com/mpv-player/mpv
+[4]: README.md#Compiling
+[5]: https://aur.archlinux.org/packages/mpc-qt-git
+[6]: https://www.freshports.org/multimedia/mpc-qt
+[7]: https://github.com/RogueScholar/mpc-qt/issues/new
+[8]: README.md#Prerequisites
+[9]: https://github.com/mpv-player/mpv-build
+[10]: https://wiki.qt.io/MSYS2
+[11]: https://mpv.srsfckn.biz/
+[12]: https://sourceforge.net/projects/mpv-player-windows/files/libmpv/
